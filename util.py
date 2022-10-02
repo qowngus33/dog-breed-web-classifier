@@ -1,6 +1,9 @@
 import numpy as np
 import os
 
+import tensorflow.compat.v1 as tf
+tf.disable_v2_behavior()
+
 from keras.preprocessing import image
 from operator import itemgetter
 

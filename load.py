@@ -1,7 +1,8 @@
 from typing import Tuple
-from keras.models import model_from_json
-import tensorflow as tf
 
+import tensorflow.compat.v1 as tf
+tf.disable_v2_behavior()
+from keras.models import model_from_json
 
 def init_model(model: str, weights: str) -> Tuple:
     """Initialize the keras model

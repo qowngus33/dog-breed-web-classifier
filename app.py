@@ -8,6 +8,10 @@ from load import init_model
 from PIL import Image
 from util import decode_prob
 
+import tensorflow.compat.v1 as tf
+tf.disable_v2_behavior()
+# tf.compat.v1.global_variables_initializer()
+
 logger = logging.getLogger("dog_breed_classifier")
 logger.setLevel(logging.DEBUG)
 
