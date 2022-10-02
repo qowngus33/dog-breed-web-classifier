@@ -7,6 +7,7 @@ from flask import Flask, render_template, request
 from load import init_model
 from PIL import Image
 from util import decode_prob
+from util import preprocess_resnet
 
 import tensorflow.compat.v1 as tf
 tf.disable_v2_behavior()
@@ -40,33 +41,18 @@ MODELS = {'resnet': RESNET_CONFIG,
 
 @app.route('/index')
 @app.route('/')
+
 def index():
-    return render_template('settings.html')
-
-
-@app.route('/settings', methods=['GET', 'POST'])
-def settings():
-    """Select Model Architecture and Initialize
-    """
     global model, graph, preprocess
-
     # grab model selected
-    model_name = request.form['model']
+    model_name = 'resnet'
     config = MODELS[model_name]
 
     # init the model with pre-trained architecture and weights
     model, graph = init_model(config['arch'], config['weights'])
-
-    # use the proper preprocessing method
-    if model_name == 'inception':
-        from util import preprocess_inception
-        preprocess = preprocess_inception
-    else:
-        from util import preprocess_resnet
-        preprocess = preprocess_resnet
+    preprocess = preprocess_resnet
 
     return render_template('select_files.html', model_name=model_name)
-
 
 @app.route('/predict', methods=['GET', 'POST'])
 def predict():
