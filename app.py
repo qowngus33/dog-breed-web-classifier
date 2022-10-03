@@ -9,8 +9,8 @@ from PIL import Image
 from util import decode_prob
 from util import preprocess_resnet
 
-import tensorflow.compat.v1 as tf
-tf.disable_v2_behavior()
+import tensorflow as tf
+# tf.disable_v2_behavior()
 # tf.compat.v1.global_variables_initializer()
 
 logger = logging.getLogger("dog_breed_classifier")
