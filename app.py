@@ -38,30 +38,37 @@ INCEPTION_CONFIG = {'arch':
 MODELS = {'resnet': RESNET_CONFIG,
           'inception': INCEPTION_CONFIG}
 
+# grab model selected
+model_name = 'resnet'
+config = MODELS[model_name]
 
-@app.route('/index')
-@app.route('/')
+# init the model with pre-trained architecture and weights
+model, graph = init_model(config['arch'], config['weights'])
+preprocess = preprocess_resnet
 
-def index():
-    global model, graph, preprocess
-    # grab model selected
-    model_name = 'resnet'
-    config = MODELS[model_name]
 
-    # init the model with pre-trained architecture and weights
-    model, graph = init_model(config['arch'], config['weights'])
-    preprocess = preprocess_resnet
-
-    return render_template('select_files.html', model_name=model_name)
+# @app.route('/index')
+# @app.route('/')
+#
+# def index():
+#     global model, graph, preprocess
+#     # grab model selected
+#     model_name = 'resnet'
+#     config = MODELS[model_name]
+#
+#     # init the model with pre-trained architecture and weights
+#     model, graph = init_model(config['arch'], config['weights'])
+#     preprocess = preprocess_resnet
+#
+#     return render_template('select_files.html', model_name=model_name)
 
 @app.route('/predict', methods=['GET', 'POST'])
 def predict():
     """File selection and display results
     """
-
-    if request.method == 'POST' and 'file[]' in request.files:
+    if request.method == 'POST':
         inputs = []
-        files = request.files.getlist('file[]')
+        files = [request.files['image']]
         for file_obj in files:
             # Check if no files uploaded
             if file_obj.filename == '':
